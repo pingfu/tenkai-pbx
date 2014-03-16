@@ -1,5 +1,5 @@
-tenkai
-======
+tenkai-pbx
+==========
 
 Asterisk and FreePBX deployment script for Ubuntu.
 
@@ -60,7 +60,7 @@ Usage
 =====
 
 $ cd /tmp
-$ wget https://raw.github.com/pingfu/tenkai/master/install-pbx.sh
+$ wget https://raw.github.com/pingfu/tenkai-pbx/master/install-pbx.sh
 $ chmod 755 install-pbx.sh
 $ sudo -s
 $ ./install-pbx.sh
