@@ -231,8 +231,8 @@ AMPDBPASS=$FREEPBXPASSW
   chmod +x /etc/init.d/amportal-stop
   update-rc.d amportal-stop stop 10 0 1 6 .
 
-  /etc/init.d/asterisk stop
-  update-rc.d -f asterisk remove
+  #/etc/init.d/asterisk stop
+  #update-rc.d -f asterisk remove
 
   /etc/init.d/apache2 reload
   amportal kill
