@@ -33,42 +33,44 @@ The major differences between the Ballistic-PBX installation script and Tenkai a
 * Script no longer creates a `/etc/ballistic/` directory
 * Added fail2ban
 
-Tenkai installs bare-bones Asterisk, FreePBX, Apache, PHP, MySQL, Sqlite and Fail2ban. No surprises.
+Tenkai installs bare-bones Asterisk and FreePBX. No surprises.
 
 Package List
 ============
 
-The complete list of packages Tenkai manages the installation of are:
+Tenkai manages the installation of:
 
 `apache2` `asterisk` `build-essential` `fail2ban` `flite` `libapache2-mod-auth-mysql` `libapache2-mod-php5` `libcurl4-openssl-dev` `libiksemel-dev` `libmysqlclient-dev` `libncurses5-dev` `libnewt-dev` `libspeex-dev` `libsqlite0-dev` `libsqlite3-dev` `libusb-dev` `libvorbis-dev` `libxml2` `libxml2-dev` `mpg123` `mysql-client` `mysql-server` `ntp` `ntpdate` `php5` `php5-cli` `php5-curl` `php5-gd` `php5-mcrypt` `php5-mysql` `php-db` `php-pear` `python-mysqldb` `python-psycopg2` `python-setuptools` `python-sqlalchemy` `sox` `sqlite` `sqlite3` `sysvinit-utils` `uuid-dev` `wget` `zlib1g-dev`
 
 
-What this script does not do
-============================
+What tenkai does not do
+=======================
 
-What this script does not do, but you probably should:
+What tenkai does not do, but you probably should:
 
 * Configure log file rotation
 * Configure your time zone `$ dpkg-reconfigure tzdata`
 * Configure fail2ban
 * Configure SSL/TLS
 * Configure access controls to FreePBX in Apache
-* 
 
 
 Usage
 =====
 
-$ cd /tmp
-$ wget https://raw.github.com/pingfu/tenkai-pbx/master/tenkai-install-pbx.sh
-$ chmod 755 install-pbx.sh
-$ sudo -s
-$ ./install-pbx.sh
+
+$ `cd /tmp`
+$ `wget https://raw.github.com/pingfu/tenkai-pbx/master/tenkai-install-pbx.sh`
+$ `chmod 755 install-pbx.sh`
+$ `sudo -s`
+$ `./install-pbx.sh`
+
 
 Credit
 ======
 
 Jonathan Roper for the original script - https://github.com/jonathan-roper/Ballistic-PBX
+
 
 Other
 =====
