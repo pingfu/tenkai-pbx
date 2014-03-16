@@ -103,11 +103,12 @@ rm -f /etc/apache2/mods-enabled/autoindex.conf
 rm -f /etc/apache2/mods-enabled/autoindex.load
 ```
 
-Be a little proactive (mod_security and mod_evasive)
+Be a little proactive (mod_security, mod_evasive and fail2ban)
 
 * http://spiderlabs.github.io/owasp-modsecurity-crs/
 * https://www.owasp.org/index.php/Category:OWASP_ModSecurity_Core_Rule_Set_Project
 * http://www.zdziarski.com/blog/?page_id=442
+* http://sysadminman.net/blog/2010/blocking-asterisk-hackingscanning-attempts-with-fail2ban-1392
 
 
 Reduce asterisk surface area
