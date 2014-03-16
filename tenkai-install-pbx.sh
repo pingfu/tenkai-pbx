@@ -219,7 +219,7 @@ AMPDBPASS=$FREEPBXPASSW
   " > /var/www/html/admin/modules/.htaccess
 
   #Insert admin / admin user into FreePBX
-  mysql -uroot -p$MYSQLROOTPASSWD asterisk -e "INSERT INTO ampusers (username,password_sha1,extension_low,extension_high,deptname,sections) VALUES ('vm', '3559095f228e3d157f2e10971a9283b28d86395c', '', '', '', '');"
+  #mysql -uroot -p$MYSQLROOTPASSWD asterisk -e "INSERT INTO ampusers (username,password_sha1,extension_low,extension_high,deptname,sections) VALUES ('vm', '3559095f228e3d157f2e10971a9283b28d86395c', '', '', '', '');"
 
   #Set the AMI to only listen on 127.0.0.1
   sed -i 's/bindaddr = 0.0.0.0/bindaddr = 127.0.0.1/g' /etc/asterisk/manager.conf
