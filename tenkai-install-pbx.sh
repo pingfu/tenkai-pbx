@@ -39,12 +39,9 @@
 # ---------------------- Install Dependencies ------------------------
 function funcdependencies()
 {
-  KERNELARCH=$(uname -p)
+  export DEBIAN_FRONTEND=noninteractive
 
-  #apt-get -y autoremove
-  #apt-get -f install
   apt-get update -y
-  #apt-get -y upgrade
 
   #install asterisk
   apt-get install -y asterisk
@@ -75,14 +72,7 @@ function funcdependencies()
 # ---------------------- Freepbx 2.11.0 ------------------------
 function funcfreepbx()
 {
-  #Write info
-  #echo "MySQL Root Password = $MYSQLROOTPASSWD"
-
-  #if [ -z "${MYSQLROOTPASSWD+xxx}" ]; then read -p "Enter MySQL root password " MYSQLROOTPASSWD; fi
-
-  #if [ -z "$MYSQLROOTPASSWD" ] && [ "${MYSQLROOTPASSWD+xxx}" = "xxx" ]; then read -p "Please enter the MySQL root password: " MYSQLROOTPASSWD; fi 
-
-  #echo "Please enter the MySQL root password: "
+  #echo check we've got the mysql password
   until mysql -u root -p$MYSQLROOTPASSWD -e ";" ; do 
     echo "Tenkai did not install MySQL for you. Please enter the MySQL root password: "
     read MYSQLROOTPASSWD
@@ -106,7 +96,6 @@ function funcfreepbx()
   if [ ! -f /etc/amportal.conf ]; 
   then
 
-    #Prepare Amportal and copy it into location.
     #Generate random password for FreePBX database user
     funcrandpass
     FREEPBXPASSW=$RANDOMPASSW
@@ -243,9 +232,6 @@ AMPDBPASS=$FREEPBXPASSW
   amportal start
 
   #Write info
-  #echo "Log into the FreePBX interface for the first time with:"
-  #echo "username = vm"
-  #echo "password = vmadmin"
   echo ""
   echo "Login to http://localhost/html/admin/ to complete the installation."
   echo ""

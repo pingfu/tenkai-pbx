@@ -77,3 +77,5 @@ Other
 =====
 
 For FreePBX installation scripts on CentOS see http://upgrades.freepbxdistro.org/blank-centos-installer/
+
+For FreePBX manual installation instructions on Ubuntu 12.04 LTS see http://wiki.freepbx.org/pages/viewpage.action?pageId=1409028
