@@ -39,7 +39,6 @@
 # ---------------------- Install Dependencies ------------------------
 function funcdependencies()
 {
-
   KERNELARCH=$(uname -p)
 
   apt-get -y autoremove
@@ -47,76 +46,20 @@ function funcdependencies()
   apt-get -y update
   apt-get -y upgrade
 
-  echo ""
-  echo ""
-  echo ""
-  echo "If the Kernel has been updated, we advise you to reboot your server and re-run the install script!"
-  echo "If you are not sure whether the kernel has been updated, reboot and start again"
-  echo ""
-  echo "Press CTRL C to exit and reboot, or enter to continue"
-  [ -f /var/run/reboot-required ] && echo "*** System restart required ***" || echo "*** System restart NOT required ***"
-  read TEMP
-
-  # check timezone
-  # dpkg-reconfigure tzdata
-
   #install asterisk
   apt-get -y install asterisk
 
   #install mysql server
-  debconf-set-selections <<< 'mysql-server mysql-server/root_password password Ui41Gnd9A6qWIs8p2V'
-  debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password Ui41Gnd9A6qWIs8p2V'
+  debconf-set-selections <<< 'mysql-server mysql-server/root_password password $MYSQLROOTPASSWD'
+  debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password $MYSQLROOTPASSWD'
   apt-get -y install mysql-server
 
   #install dependencies
-  apt-get -y install libsqlite3-dev sqlite3 uuid-dev
-
-  apt-get -i install apache2
-  apt-get -y install mysql-client
-
-  apt-get -y install build-essential
-  apt-get -y install flite
-  apt-get -y install libapache2-mod-auth-mysql
-  apt-get -y install libapache2-mod-php5
-  apt-get -y install libcurl4-openssl-dev
-  apt-get -y install libiksemel-dev
-  apt-get -y install libmysqlclient-dev
-  apt-get -y install libncurses5-dev
-  apt-get -y install libnewt-dev
-  apt-get -y install libspeex-dev
-  apt-get -y install libsqlite0-dev
-  apt-get -y install libusb-dev
-  apt-get -y install libvorbis-dev
-  apt-get -y install libxml2
-  apt-get -y install libxml2-dev
-  apt-get -y install mpg123
-  apt-get -y install ntp
-  apt-get -y install php5
-  apt-get -y install php5-cli
-  apt-get -y install php5-curl
-  apt-get -y install php5-gd
-  apt-get -y install php5-mcrypt
-  apt-get -y install php5-mysql
-  apt-get -y install php-db
-  apt-get -y install php-pear
-  apt-get -y install python-mysqldb
-  apt-get -y install python-psycopg2
-  apt-get -y install python-setuptools
-  apt-get -y install python-sqlalchemy
-  apt-get -y install sox
-  apt-get -y install sqlite
-  apt-get -y install sysvinit-utils
-  #apt-get -y install unixodbc
-  #apt-get -y install unixodbc-dev
-  apt-get -y install wget
-  apt-get -y install zlib1g-dev
-
-  #extras
-  apt-get -y install wget sudo iptables vim subversion flex bison libtiff-tools ghostscript autoconf gcc g++ automake libtool patch
-  apt-get -y install linux-headers-$(uname -r)
-
-  #remove the following packages for security.
-  apt-get -y remove nfs-common portmap
+  apt-get -i -q install apache2
+  apt-get -y -q install mysql-client
+  apt-get -y -q install build-essential flite libapache2-mod-auth-mysql libapache2-mod-php5 libcurl4-openssl-dev libiksemel-dev libmysqlclient-dev libncurses5-dev libnewt-dev libspeex-dev
+  apt-get -y -q install libsqlite0-dev libusb-dev libvorbis-dev libxml2 libxml2-dev mpg123 ntp php5 php5-cli php5-curl php5-gd php5-mcrypt php5-mysql php-db php-pear python-mysqldb python-psycopg2
+  apt-get -y -q install python-setuptools python-sqlalchemy sox sqlite sysvinit-utils wget zlib1g-dev libsqlite3-dev sqlite3 uuid-dev fail2ban
 
   #Set MySQL to start automatically
   update-rc.d mysql remove
@@ -133,21 +76,20 @@ function funcdependencies()
 # ---------------------- Freepbx 2.11.0 ------------------------
 function funcfreepbx()
 {
+  #Write info
+  echo "MySQL Root Password = $MYSQLROOTPASSWD"
 
   if [ -z "${MYSQLROOTPASSWD+xxx}" ]; then read -p "Enter MySQL root password " MYSQLROOTPASSWD; fi
 
   if [ -z "$MYSQLROOTPASSWD" ] && [ "${MYSQLROOTPASSWD+xxx}" = "xxx" ]; then read -p "Please enter the MySQL root password: " MYSQLROOTPASSWD; fi 
 
   echo "Please enter the MySQL root password: "
-  until mysql -uroot -p$MYSQLROOTPASSWD -e ";" ; do 
+  until mysql -u root -p $MYSQLROOTPASSWD -e ";" ; do 
     echo "Please enter the MySQL root password: "
     read MYSQLROOTPASSWD
     echo "Password incorrect"
   done
 
-  #Write info
-  echo "MySQL Root Password = $MYSQLROOTPASS"
-    
 	# Get FreePBX
   cd /usr/src
   rm -rf freepbx*.tar.gz
@@ -306,7 +248,7 @@ AMPDBPASS=$FREEPBXPASSW
   echo "password = vmadmin"
   echo "This can be changed via the FreePBX administrator interface later."
   echo "Press Enter to continue"
-  echo "MySQL Root Password = $MYSQLROOTPASS"
+  echo "MySQL Root Password = $MYSQLROOTPASSWD"
 
   ExitFinish=1
 }
@@ -331,6 +273,11 @@ function show_menu()
 
 
 
+
+
+
+
+
 ExitFinish=0
 
 while [ $ExitFinish -eq 0 ]; do
@@ -339,8 +286,15 @@ while [ $ExitFinish -eq 0 ]; do
 
     case $OPTION in
         1) 
+            funcrandpass
+            MYSQLROOTPASSWD=$RANDOMPASSW
+
+            echo "MySQL Root Password = $MYSQLROOTPASSWD"
+
             funcdependencies
             funcfreepbx
+
+            echo "MySQL Root Password = $MYSQLROOTPASSWD"
             echo "done"
         ;;
         9)

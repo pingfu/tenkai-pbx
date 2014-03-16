@@ -6,7 +6,7 @@ Asterisk and FreePBX deployment script for Ubuntu.
 About
 =====
 
-This script takes a stock Ubuntu 12.04 LTS system and installs Asterisk with FreePBX. Once installed, Asterisk you can use apt (for asterisk) and the FreePBX upgrade scripts to keep your system updated. 
+This script takes a _stock_ Ubuntu 12.04 LTS system and installs Asterisk with FreePBX. Once installed, Asterisk you can use apt (for asterisk) and the FreePBX upgrade scripts to keep your system updated.
 
 Tenkai is a modified version of the Ballistic-PBX installation script written by Jonathan Roper.
 
@@ -23,6 +23,7 @@ The major differences between the Ballistic-PBX installation script and Tenkai a
 * Removed installation of Iptables.
 * Removed installation of SSH keys.
 * Removed installation of TFTP server.
+* Removed installation of kernel headers and compiler tools.
 * Removed Apache TLS configuration.
 * Script no longer creates a directory in /etc
 * Assumes installation is taking place over SSH, so does not try to install openssh-server
