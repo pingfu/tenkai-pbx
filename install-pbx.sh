@@ -41,10 +41,10 @@ function funcdependencies()
 {
   KERNELARCH=$(uname -p)
 
-  apt-get -y autoremove
-  apt-get -f install
-  apt-get -y update
-  apt-get -y upgrade
+  #apt-get -y autoremove
+  #apt-get -f install
+  #apt-get -y update
+  #apt-get -y upgrade
 
   #install asterisk
   apt-get -y install asterisk
@@ -52,6 +52,10 @@ function funcdependencies()
   #install mysql server
   debconf-set-selections <<< 'mysql-server mysql-server/root_password password $MYSQLROOTPASSWD'
   debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password $MYSQLROOTPASSWD'
+
+  echo mysql-server mysql-server/root_password password $MYSQLROOTPASSWD | sudo debconf-set-selections
+  echo mysql-server mysql-server/root_password_again password $MYSQLROOTPASSWD | sudo debconf-set-selections
+
   apt-get -y install mysql-server
 
   #install dependencies
@@ -79,11 +83,11 @@ function funcfreepbx()
   #Write info
   echo "MySQL Root Password = $MYSQLROOTPASSWD"
 
-  if [ -z "${MYSQLROOTPASSWD+xxx}" ]; then read -p "Enter MySQL root password " MYSQLROOTPASSWD; fi
+  #if [ -z "${MYSQLROOTPASSWD+xxx}" ]; then read -p "Enter MySQL root password " MYSQLROOTPASSWD; fi
 
-  if [ -z "$MYSQLROOTPASSWD" ] && [ "${MYSQLROOTPASSWD+xxx}" = "xxx" ]; then read -p "Please enter the MySQL root password: " MYSQLROOTPASSWD; fi 
+  #if [ -z "$MYSQLROOTPASSWD" ] && [ "${MYSQLROOTPASSWD+xxx}" = "xxx" ]; then read -p "Please enter the MySQL root password: " MYSQLROOTPASSWD; fi 
 
-  echo "Please enter the MySQL root password: "
+  #echo "Please enter the MySQL root password: "
   until mysql -u root -p $MYSQLROOTPASSWD -e ";" ; do 
     echo "Please enter the MySQL root password: "
     read MYSQLROOTPASSWD
@@ -164,6 +168,7 @@ AMPDBPASS=$FREEPBXPASSW
   ln -s /etc/apache2/mods-available/auth_mysql.load /etc/apache2/mods-enabled/auth_mysql.load
   sed -i 's/\(^upload_max_filesize = \).*/\120M/' /etc/php5/apache2/php.ini
   sed -i 's/post_max_size = .*/post_max_size = 100M/' /etc/php5/apache2/php.ini
+  sed -i 's/^\(SAFE_AST_BACKGROUND=\s*\).*$/\11/' /usr/sbin/safe_asterisk
   sed -i 's/^\(User\|Group\).*/\1 asterisk/' /etc/apache2/apache2.conf
   sed -i 's/www-data/asterisk/g'  /etc/apache2/envvars
   echo 'ServerName localhost' >> /etc/apache2/apache2.conf
@@ -246,9 +251,13 @@ AMPDBPASS=$FREEPBXPASSW
   echo "Log into the FreePBX interface for the first time with:"
   echo "username = vm"
   echo "password = vmadmin"
-  echo "This can be changed via the FreePBX administrator interface later."
+  echo ""
+  echo "mysql root password   = $MYSQLROOTPASSWD"
+  echo "asterisk ari password = $ARIPASSW"
+  echo "amportal password     = $FREEPBXPASSW"
+  echo ""
+  echo ""
   echo "Press Enter to continue"
-  echo "MySQL Root Password = $MYSQLROOTPASSWD"
 
   ExitFinish=1
 }
@@ -290,6 +299,11 @@ while [ $ExitFinish -eq 0 ]; do
             MYSQLROOTPASSWD=$RANDOMPASSW
 
             echo "MySQL Root Password = $MYSQLROOTPASSWD"
+            echo ""
+            echo ""
+            echo ""
+            echo ""
+            echo ""
 
             funcdependencies
             funcfreepbx
