@@ -62,7 +62,7 @@ function funcdependencies()
   apt-get install -y mysql-server
 
   #install dependencies
-  apt-get install -y -q apache2 mysql-client build-essential flite libapache2-mod-auth-mysql libapache2-mod-php5 libcurl4-openssl-dev libiksemel-dev libmysqlclient-dev libncurses5-dev libnewt-dev libspeex-dev libsqlite0-dev libusb-dev libvorbis-dev libxml2 libxml2-dev mpg123 php5 php5-cli php5-curl php5-gd php5-mcrypt php5-mysql php-db php-pear python-mysqldb python-psycopg2 python-setuptools python-sqlalchemy sox sqlite sysvinit-utils wget zlib1g-dev libsqlite3-dev sqlite3 uuid-dev fail2ban ntp ntpdate
+  apt-get install -y -q apache2 mysql-client build-essential flite libapache2-mod-auth-mysql libapache2-mod-php5 libcurl4-openssl-dev libiksemel-dev libmysqlclient-dev libncurses5-dev libnewt-dev libspeex-dev libsqlite0-dev libusb-dev libvorbis-dev libxml2 libxml2-dev mpg123 php5 php5-cli php5-curl php5-gd php5-mcrypt php5-mysql php-db php-pear python-mysqldb python-psycopg2 python-setuptools python-sqlalchemy sox sqlite sysvinit-utils unixodbc unixodbc-dev wget zlib1g-dev libsqlite3-dev sqlite3 uuid-dev fail2ban ntp ntpdate
 
   #Set MySQL to start automatically
   update-rc.d mysql remove
@@ -72,6 +72,10 @@ function funcdependencies()
   /usr/sbin/ntpdate -su pool.ntp.org
   hwclock --systohc
 
+  echo '# Disable wild card listener' >> /etc/ntp.conf
+  echo 'interface ignore wildcard' >> /etc/ntp.conf
+
+  service ntp restart
   service asterisk start
 }
 

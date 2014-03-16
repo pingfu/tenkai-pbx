@@ -52,7 +52,7 @@ Package List
 
 Tenkai manages the installation of:
 
-`apache2` `asterisk` `build-essential` `fail2ban` `flite` `libapache2-mod-auth-mysql` `libapache2-mod-php5` `libcurl4-openssl-dev` `libiksemel-dev` `libmysqlclient-dev` `libncurses5-dev` `libnewt-dev` `libspeex-dev` `libsqlite0-dev` `libsqlite3-dev` `libusb-dev` `libvorbis-dev` `libxml2` `libxml2-dev` `mpg123` `mysql-client` `mysql-server` `ntp` `ntpdate` `php5` `php5-cli` `php5-curl` `php5-gd` `php5-mcrypt` `php5-mysql` `php-db` `php-pear` `python-mysqldb` `python-psycopg2` `python-setuptools` `python-sqlalchemy` `sox` `sqlite` `sqlite3` `sysvinit-utils` `uuid-dev` `wget` `zlib1g-dev`
+`apache2` `asterisk` `build-essential` `fail2ban` `flite` `libapache2-mod-auth-mysql` `libapache2-mod-php5` `libcurl4-openssl-dev` `libiksemel-dev` `libmysqlclient-dev` `libncurses5-dev` `libnewt-dev` `libspeex-dev` `libsqlite0-dev` `libsqlite3-dev` `libusb-dev` `libvorbis-dev` `libxml2` `libxml2-dev` `mpg123` `mysql-client` `mysql-server` `ntp` `ntpdate` `php5` `php5-cli` `php5-curl` `php5-gd` `php5-mcrypt` `php5-mysql` `php-db` `php-pear` `python-mysqldb` `python-psycopg2` `python-setuptools` `python-sqlalchemy` `sox` `sqlite` `sqlite3` `sysvinit-utils` `unixodbc` `unixodbc-dev` `uuid-dev` `wget` `zlib1g-dev`
 
 
 What tenkai does not do
@@ -71,7 +71,7 @@ What tenkai does not do, but you probably should:
 Basic apache hardening
 ======================
 
-At a minimum you should harden your apache configuration /etc/apache2/sites-available/default
+At a minimum you should harden your apache configuration `/etc/apache2/sites-available/default`
 
 ```
 <VirtualHost *:80>
@@ -81,7 +81,7 @@ At a minimum you should harden your apache configuration /etc/apache2/sites-avai
 	TraceEnable off
 
 	<Directory />
-		Options none
+		Options -Indexes
 		AllowOverride None
 		LimitRequestBody 512000
 		Order allow,deny
@@ -109,6 +109,17 @@ Be a little proactive (mod_security and mod_evasive)
 * https://www.owasp.org/index.php/Category:OWASP_ModSecurity_Core_Rule_Set_Project
 * http://www.zdziarski.com/blog/?page_id=442
 
+
+Reduce asterisk surface area
+============================
+
+Disable Asterisk modules you don't need. 
+
+```
+echo 'noload => chan_skinny.so' >> /etc/asterisk/modules.conf
+echo 'noload => chan_mgcp.so' >> /etc/asterisk/modules.conf
+echo 'noload => pbx_dundi.so' >> /etc/asterisk/modules.conf
+```
 
 Credits
 =======
