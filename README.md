@@ -49,7 +49,7 @@ What tenkai does not do
 What tenkai does not do, but you probably should:
 
 * Configure log file rotation
-* Configure your time zone `$ dpkg-reconfigure tzdata`
+* Configure your time zone (i.e. `$ dpkg-reconfigure tzdata`)
 * Configure fail2ban
 * Configure SSL/TLS
 * Configure access controls to FreePBX in Apache
@@ -61,9 +61,9 @@ Usage
 ```
 $ cd /tmp
 $ wget https://raw.github.com/pingfu/tenkai-pbx/master/tenkai-install-pbx.sh
-$ chmod 755 install-pbx.sh
+$ chmod 755 tenkai-install-pbx.sh
 $ sudo -s
-$ ./install-pbx.sh
+$ ./tenkai-install-pbx.sh
 ```
 
 
