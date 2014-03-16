@@ -20,7 +20,7 @@ $ cd /tmp
 $ wget https://raw.github.com/pingfu/tenkai-pbx/master/tenkai-install-pbx.sh
 $ chmod 755 tenkai-install-pbx.sh
 $ sudo -s
-$ ./tenkai-install-pbx.sh
+# ./tenkai-install-pbx.sh
 ```
 
 
