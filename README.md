@@ -58,15 +58,13 @@ What tenkai does not do, but you probably should:
 Usage
 =====
 
-$ `cd /tmp`
-
-$ `wget https://raw.github.com/pingfu/tenkai-pbx/master/tenkai-install-pbx.sh`
-
-$ `chmod 755 install-pbx.sh`
-
-$ `sudo -s`
-
-$ `./install-pbx.sh`
+```
+$ cd /tmp
+$ wget https://raw.github.com/pingfu/tenkai-pbx/master/tenkai-install-pbx.sh
+$ chmod 755 install-pbx.sh
+$ sudo -s
+$ ./install-pbx.sh
+```
 
 
 Credit
