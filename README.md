@@ -92,7 +92,6 @@ At a minimum you should harden your apache configuration /etc/apache2/sites-avai
 	CustomLog ${APACHE_LOG_DIR}/access.log combined
 
 </VirtualHost>
-
 ```
 
 Disable unwanted modules
@@ -110,8 +109,8 @@ Be a little proactive (mod_security and mod_evasive)
 * http://www.zdziarski.com/blog/?page_id=442
 
 
-Credit
-======
+Credits
+=======
 
 Jonathan Roper for the original script - https://github.com/jonathan-roper/Ballistic-PBX
 
@@ -119,6 +118,8 @@ Jonathan Roper for the original script - https://github.com/jonathan-roper/Balli
 Other
 =====
 
-For FreePBX installation scripts on CentOS see http://upgrades.freepbxdistro.org/blank-centos-installer/
+For FreePBX installation scripts on CentOS see
+http://upgrades.freepbxdistro.org/blank-centos-installer/
 
-For FreePBX manual installation instructions on Ubuntu 12.04 LTS see http://wiki.freepbx.org/pages/viewpage.action?pageId=1409028
+For FreePBX manual installation instructions on Ubuntu 12.04 LTS see
+http://wiki.freepbx.org/pages/viewpage.action?pageId=1409028
