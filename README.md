@@ -60,8 +60,9 @@ What tenkai does not do
 
 What tenkai does not do, but you probably should:
 
-* Configure log file rotation
+* `apt-get upgrade`
 * Configure your time zone (i.e. `$ dpkg-reconfigure tzdata`)
+* Configure log file rotation
 * Configure fail2ban
 * Configure SSL/TLS
 * Configure access controls to FreePBX in Apache
