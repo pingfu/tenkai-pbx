@@ -83,7 +83,7 @@ At a minimum you should harden your apache configuration /etc/apache2/sites-avai
 		Options none
 		AllowOverride None
 		LimitRequestBody 512000
-		Order deny,allow
+		Order allow,deny
 		allow from 127.0.0.1
 	</Directory>
 
