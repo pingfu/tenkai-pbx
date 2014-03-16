@@ -12,8 +12,8 @@ This script takes a _stock_ Ubuntu 12.04 LTS system and installs Asterisk with F
 Tenkai is a modified version of the Ballistic-PBX installation script written by Jonathan Roper.
 
 
-Useage
-======
+Usage
+=====
 
 ```
 $ cd /tmp
