@@ -162,6 +162,7 @@ AMPDBPASS=$FREEPBXPASSW
   sed -i 's/^\(User\|Group\).*/\1 asterisk/' /etc/apache2/apache2.conf
   sed -i 's/www-data/asterisk/g'  /etc/apache2/envvars
   echo 'ServerName localhost' >> /etc/apache2/apache2.conf
+  echo 'ServerTokens Prod' >> /etc/apache2/apache2.conf
   service apache2 restart
 
   #Remove files, and re-symlink 

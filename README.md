@@ -67,6 +67,49 @@ What tenkai does not do, but you probably should:
 * Configure access controls to FreePBX in Apache
 
 
+Basic Apache Hardening
+======================
+
+At a minimum you should harden your apache configuration /etc/apache2/sites-available/default
+
+```
+<VirtualHost *:80>
+
+	DocumentRoot /var/www/html/admin
+	ServerSignature Off
+	TraceEnable off
+
+	<Directory />
+		Options none
+		AllowOverride None
+		LimitRequestBody 512000
+		Order deny,allow
+		allow from 127.0.0.1
+	</Directory>
+
+	LogLevel warn
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+
+```
+
+Disable unwanted modules
+
+```
+rm -f /etc/apache2/mods-enabled/cgi.load
+rm -f /etc/apache2/mods-enabled/autoindex.conf
+rm -f /etc/apache2/mods-enabled/autoindex.load
+```
+
+Be a little proactive (mod_security and mod_evasive)
+
+* http://spiderlabs.github.io/owasp-modsecurity-crs/
+* https://www.owasp.org/index.php/Category:OWASP_ModSecurity_Core_Rule_Set_Project
+* http://www.zdziarski.com/blog/?page_id=442
+
+
 Credit
 ======
 
