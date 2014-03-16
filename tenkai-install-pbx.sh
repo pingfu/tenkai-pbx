@@ -27,6 +27,12 @@
 # Tenkai is a modified version of the Ballistic-PBX installation script written by Jonathan Roper.
 #
 #
+# Todo
+# ----
+# 1. Add -unattended switch
+# 2. Save passwords to /tmp/tenkai-pbx-install.log
+#
+#
 # Credit
 # ------
 # Original script by jonathan@star2billing.com - https://github.com/jonathan-roper/Ballistic-PBX
