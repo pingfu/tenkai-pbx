@@ -1,4 +1,4 @@
-tenkai-pbx
+Tenkai-PBX
 ==========
 
 Asterisk and FreePBX deployment script for Ubuntu.
@@ -12,8 +12,8 @@ This script takes a _stock_ Ubuntu 12.04 LTS system and installs Asterisk with F
 Tenkai is a modified version of the Ballistic-PBX installation script written by Jonathan Roper.
 
 
-Use
-=====
+Useage
+======
 
 ```
 $ cd /tmp
@@ -67,7 +67,7 @@ What tenkai does not do, but you probably should:
 * Configure access controls to FreePBX in Apache
 
 
-Basic Apache Hardening
+Basic apache hardening
 ======================
 
 At a minimum you should harden your apache configuration /etc/apache2/sites-available/default
