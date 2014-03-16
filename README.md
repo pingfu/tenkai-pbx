@@ -12,6 +12,18 @@ This script takes a _stock_ Ubuntu 12.04 LTS system and installs Asterisk with F
 Tenkai is a modified version of the Ballistic-PBX installation script written by Jonathan Roper.
 
 
+Use
+=====
+
+```
+$ cd /tmp
+$ wget https://raw.github.com/pingfu/tenkai-pbx/master/tenkai-install-pbx.sh
+$ chmod 755 tenkai-install-pbx.sh
+$ sudo -s
+$ ./tenkai-install-pbx.sh
+```
+
+
 Changes
 =======
 
@@ -53,18 +65,6 @@ What tenkai does not do, but you probably should:
 * Configure fail2ban
 * Configure SSL/TLS
 * Configure access controls to FreePBX in Apache
-
-
-Usage
-=====
-
-```
-$ cd /tmp
-$ wget https://raw.github.com/pingfu/tenkai-pbx/master/tenkai-install-pbx.sh
-$ chmod 755 tenkai-install-pbx.sh
-$ sudo -s
-$ ./tenkai-install-pbx.sh
-```
 
 
 Credit
