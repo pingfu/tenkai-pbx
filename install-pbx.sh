@@ -43,11 +43,11 @@ function funcdependencies()
 
   #apt-get -y autoremove
   #apt-get -f install
-  #apt-get -y update
+  apt-get update -y
   #apt-get -y upgrade
 
   #install asterisk
-  apt-get -y install asterisk
+  apt-get install -y asterisk
 
   #install mysql server
   debconf-set-selections <<< 'mysql-server mysql-server/root_password password $MYSQLROOTPASSWD'
@@ -56,21 +56,16 @@ function funcdependencies()
   echo mysql-server mysql-server/root_password password $MYSQLROOTPASSWD | sudo debconf-set-selections
   echo mysql-server mysql-server/root_password_again password $MYSQLROOTPASSWD | sudo debconf-set-selections
 
-  apt-get -y install mysql-server
+  apt-get install -y mysql-server
 
   #install dependencies
-  apt-get -i -q install apache2
-  apt-get -y -q install mysql-client
-  apt-get -y -q install build-essential flite libapache2-mod-auth-mysql libapache2-mod-php5 libcurl4-openssl-dev libiksemel-dev libmysqlclient-dev libncurses5-dev libnewt-dev libspeex-dev
-  apt-get -y -q install libsqlite0-dev libusb-dev libvorbis-dev libxml2 libxml2-dev mpg123 ntp php5 php5-cli php5-curl php5-gd php5-mcrypt php5-mysql php-db php-pear python-mysqldb python-psycopg2
-  apt-get -y -q install python-setuptools python-sqlalchemy sox sqlite sysvinit-utils wget zlib1g-dev libsqlite3-dev sqlite3 uuid-dev fail2ban
+  apt-get install -y -q apache2 mysql-client build-essential flite libapache2-mod-auth-mysql libapache2-mod-php5 libcurl4-openssl-dev libiksemel-dev libmysqlclient-dev libncurses5-dev libnewt-dev libspeex-dev libsqlite0-dev libusb-dev libvorbis-dev libxml2 libxml2-dev mpg123 ntp php5 php5-cli php5-curl php5-gd php5-mcrypt php5-mysql php-db php-pear python-mysqldb python-psycopg2 python-setuptools python-sqlalchemy sox sqlite sysvinit-utils wget zlib1g-dev libsqlite3-dev sqlite3 uuid-dev fail2ban ntp ntpdate
 
   #Set MySQL to start automatically
   update-rc.d mysql remove
   update-rc.d mysql defaults
 
   #Sync the clock
-  apt-get -y install ntp ntpdate
   /usr/sbin/ntpdate -su pool.ntp.org
   hwclock --systohc
 
@@ -81,17 +76,17 @@ function funcdependencies()
 function funcfreepbx()
 {
   #Write info
-  echo "MySQL Root Password = $MYSQLROOTPASSWD"
+  #echo "MySQL Root Password = $MYSQLROOTPASSWD"
 
   #if [ -z "${MYSQLROOTPASSWD+xxx}" ]; then read -p "Enter MySQL root password " MYSQLROOTPASSWD; fi
 
   #if [ -z "$MYSQLROOTPASSWD" ] && [ "${MYSQLROOTPASSWD+xxx}" = "xxx" ]; then read -p "Please enter the MySQL root password: " MYSQLROOTPASSWD; fi 
 
   #echo "Please enter the MySQL root password: "
-  until mysql -u root -p $MYSQLROOTPASSWD -e ";" ; do 
-    echo "Please enter the MySQL root password: "
+  until mysql -u root -p$MYSQLROOTPASSWD -e ";" ; do 
+    echo "Tenkai did not install MySQL for you. Please enter the MySQL root password: "
     read MYSQLROOTPASSWD
-    echo "Password incorrect"
+    echo "Incorrect."
   done
 
 	# Get FreePBX
@@ -248,16 +243,17 @@ AMPDBPASS=$FREEPBXPASSW
   amportal start
 
   #Write info
-  echo "Log into the FreePBX interface for the first time with:"
-  echo "username = vm"
-  echo "password = vmadmin"
+  #echo "Log into the FreePBX interface for the first time with:"
+  #echo "username = vm"
+  #echo "password = vmadmin"
   echo ""
-  echo "mysql root password   = $MYSQLROOTPASSWD"
-  echo "asterisk ari password = $ARIPASSW"
-  echo "amportal password     = $FREEPBXPASSW"
+  echo "Login to http://localhost/html/admin/ to complete the installation."
   echo ""
+  echo "Tenkai set the following passwords:"
+  echo "  MySQL Root Password   = $MYSQLROOTPASSWD"
+  echo "  Asterisk ARI Password = $ARIPASSW"
+  echo "  AMPortal Password     = $FREEPBXPASSW"
   echo ""
-  echo "Press Enter to continue"
 
   ExitFinish=1
 }
@@ -297,19 +293,8 @@ while [ $ExitFinish -eq 0 ]; do
         1) 
             funcrandpass
             MYSQLROOTPASSWD=$RANDOMPASSW
-
-            echo "MySQL Root Password = $MYSQLROOTPASSWD"
-            echo ""
-            echo ""
-            echo ""
-            echo ""
-            echo ""
-
             funcdependencies
             funcfreepbx
-
-            echo "MySQL Root Password = $MYSQLROOTPASSWD"
-            echo "done"
         ;;
         9)
         ExitFinish=1

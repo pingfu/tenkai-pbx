@@ -29,26 +29,35 @@ The major differences between the Ballistic-PBX installation script and Tenkai a
 * Assumes installation is taking place over SSH, so does not try to install openssh-server
 * Added fail2ban
 
+Tenkai does exactly what it says on the tin, no surprises.
 
 What this script does not do
 ============================
 
-* Harden your server
-* Configure asterisk log file rotation
-* Set the time zone `$ dpkg-reconfigure tzdata`
+What this script does not do, but you probably should:
 
+* Configure log file rotation
+* Configure your time zone `$ dpkg-reconfigure tzdata`
+* Configure fail2ban
+* Configure SSL/TLS
+* Configure access controls to FreePBX in Apache
+* 
 
 Usage
 =====
 
-
+$ cd /tmp
+$ wget https://raw.github.com/pingfu/tenkai/master/install-pbx.sh
+$ chmod 755 install-pbx.sh
+$ sudo -s
+$ ./install-pbx.sh
 
 Credit
 ======
 
-https://github.com/jonathan-roper/Ballistic-PBX
+Jonathan Roper for the original script - https://github.com/jonathan-roper/Ballistic-PBX
 
 Other
 =====
 
-For CentOS installation scripts see http://upgrades.freepbxdistro.org/blank-centos-installer/
+For FreePBX installation scripts on CentOS see http://upgrades.freepbxdistro.org/blank-centos-installer/
