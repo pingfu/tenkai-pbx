@@ -61,14 +61,55 @@ function funcdependencies()
   # dpkg-reconfigure tzdata
 
   #install asterisk
-  apt-get -i install asterisk
+  apt-get -y install asterisk
+
+  #install mysql server
+  debconf-set-selections <<< 'mysql-server mysql-server/root_password password Ui41Gnd9A6qWIs8p2V'
+  debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password Ui41Gnd9A6qWIs8p2V'
+  apt-get -y install mysql-server
 
   #install dependencies
   apt-get -y install libsqlite3-dev sqlite3 uuid-dev
-  apt-get -y install mysql-server
-  apt-get -y install mysql-client libmysqlclient-dev build-essential sysvinit-utils libxml2 libxml2-dev libncurses5-dev libcurl4-openssl-dev libvorbis-dev libspeex-dev 
-  apt-get -y unixodbc unixodbc-dev libiksemel-dev wget iptables php5 php5-cli php-pear php5-mysql php-db libapache2-mod-php5 php5-gd php5-curl sqlite libnewt-dev libusb-dev zlib1g-dev 
-  apt-get -y libsqlite0-dev libapache2-mod-auth-mysql sox mpg123 flite php5-mcrypt python-setuptools python-mysqldb python-psycopg2 python-sqlalchemy ntp
+
+  apt-get -i install apache2
+  apt-get -y install mysql-client
+
+  apt-get -y install build-essential
+  apt-get -y install flite
+  apt-get -y install libapache2-mod-auth-mysql
+  apt-get -y install libapache2-mod-php5
+  apt-get -y install libcurl4-openssl-dev
+  apt-get -y install libiksemel-dev
+  apt-get -y install libmysqlclient-dev
+  apt-get -y install libncurses5-dev
+  apt-get -y install libnewt-dev
+  apt-get -y install libspeex-dev
+  apt-get -y install libsqlite0-dev
+  apt-get -y install libusb-dev
+  apt-get -y install libvorbis-dev
+  apt-get -y install libxml2
+  apt-get -y install libxml2-dev
+  apt-get -y install mpg123
+  apt-get -y install ntp
+  apt-get -y install php5
+  apt-get -y install php5-cli
+  apt-get -y install php5-curl
+  apt-get -y install php5-gd
+  apt-get -y install php5-mcrypt
+  apt-get -y install php5-mysql
+  apt-get -y install php-db
+  apt-get -y install php-pear
+  apt-get -y install python-mysqldb
+  apt-get -y install python-psycopg2
+  apt-get -y install python-setuptools
+  apt-get -y install python-sqlalchemy
+  apt-get -y install sox
+  apt-get -y install sqlite
+  apt-get -y install sysvinit-utils
+  #apt-get -y install unixodbc
+  #apt-get -y install unixodbc-dev
+  apt-get -y install wget
+  apt-get -y install zlib1g-dev
 
   #extras
   apt-get -y install wget sudo iptables vim subversion flex bison libtiff-tools ghostscript autoconf gcc g++ automake libtool patch
@@ -76,9 +117,6 @@ function funcdependencies()
 
   #remove the following packages for security.
   apt-get -y remove nfs-common portmap
-
-  #Enable Mod_Auth_MySQL
-  ln -s /etc/apache2/mods-available/auth_mysql.load /etc/apache2/mods-enabled/auth_mysql.load
 
   #Set MySQL to start automatically
   update-rc.d mysql remove
@@ -88,38 +126,29 @@ function funcdependencies()
   apt-get -y install ntp ntpdate
   /usr/sbin/ntpdate -su pool.ntp.org
   hwclock --systohc
+
+  service asterisk start
 }
 
-# ---------------------- Freepbx 11 ------------------------
-function funcfreepbx() {
+# ---------------------- Freepbx 2.11.0 ------------------------
+function funcfreepbx()
+{
 
-  #check asterisk is running, before FreePBX is installed.
-  if test -f /var/run/asterisk/asterisk.pid; 
-  then
+  if [ -z "${MYSQLROOTPASSWD+xxx}" ]; then read -p "Enter MySQL root password " MYSQLROOTPASSWD; fi
 
-    #Don't allow progress until access confirmed to database
-    #Check root password set, if not, ask for it
-    if [ -z "${MYSQLROOTPASSWD+xxx}" ]; then read -p "Enter MySQL root password " MYSQLROOTPASSWD; fi
+  if [ -z "$MYSQLROOTPASSWD" ] && [ "${MYSQLROOTPASSWD+xxx}" = "xxx" ]; then read -p "Please enter the MySQL root password: " MYSQLROOTPASSWD; fi 
 
-    if [ -z "$MYSQLROOTPASSWD" ] && [ "${MYSQLROOTPASSWD+xxx}" = "xxx" ]; then read -p "Enter MySQL root password " MYSQLROOTPASSWD; fi 
+  echo "Please enter the MySQL root password: "
+  until mysql -uroot -p$MYSQLROOTPASSWD -e ";" ; do 
+    echo "Please enter the MySQL root password: "
+    read MYSQLROOTPASSWD
+    echo "Password incorrect"
+  done
 
-    echo "Please enter the MySQL root password"
-    until mysql -uroot -p$MYSQLROOTPASSWD -e ";" ; do 
-    	echo "Please enter the MySQL root password"
-		read MYSQLROOTPASSWD
-		echo "password incorrect"
-
-	done
-    
-  #Write FreePBX info
+  #Write info
   echo "MySQL Root Password = $MYSQLROOTPASS"
-  
-  #Set Apache to run as asterisk
-  sed -i 's/www-data/asterisk/g'  /etc/apache2/envvars
-  chown -R asterisk:asterisk /var/lock/apache2
-  /etc/init.d/apache2 restart
     
-	# Get FreePBX - Unzip and modify
+	# Get FreePBX
   cd /usr/src
   rm -rf freepbx*.tar.gz
   rm -rf freepbx
@@ -179,9 +208,24 @@ AMPDBPASS=$FREEPBXPASSW
   mysql -uroot -p$MYSQLROOTPASSWD -e "GRANT ALL PRIVILEGES ON asteriskcdrdb.* TO asteriskuser@localhost IDENTIFIED BY '$AMPDBPASS'"
   ./install_amp --username=$AMPDBUSER --password=$AMPDBPASS
 
+  mkdir /var/www/html
+  chown    asterisk:asterisk /var/run/asterisk
   chown -R asterisk:asterisk /etc/asterisk
+  chown -R asterisk:asterisk /var/www/
   chown -R asterisk:asterisk /var/www/html/
   chown -R asterisk:asterisk /var/lib/asterisk
+  chown -R asterisk:asterisk /etc/asterisk
+  chown -R asterisk:asterisk /var/{lib,log,spool}/asterisk
+  chown -R asterisk:asterisk /var/lock/apache2
+
+  # configure apache
+  ln -s /etc/apache2/mods-available/auth_mysql.load /etc/apache2/mods-enabled/auth_mysql.load
+  sed -i 's/\(^upload_max_filesize = \).*/\120M/' /etc/php5/apache2/php.ini
+  sed -i 's/post_max_size = .*/post_max_size = 100M/' /etc/php5/apache2/php.ini
+  sed -i 's/^\(User\|Group\).*/\1 asterisk/' /etc/apache2/apache2.conf
+  sed -i 's/www-data/asterisk/g'  /etc/apache2/envvars
+  echo 'ServerName localhost' >> /etc/apache2/apache2.conf
+  service apache2 restart
 
   #Remove files, and re-symlink 
   rm /etc/asterisk/cel.conf
@@ -199,7 +243,6 @@ AMPDBPASS=$FREEPBXPASSW
 
   #Bring modules upto date and get useful modules
   /var/lib/asterisk/bin/module_admin upgradeall
-
   /var/lib/asterisk/bin/module_admin download asterisk-cli
   /var/lib/asterisk/bin/module_admin download asteriskinfo 
   /var/lib/asterisk/bin/module_admin download backup 
@@ -223,7 +266,6 @@ AMPDBPASS=$FREEPBXPASSW
   /var/lib/asterisk/bin/module_admin install sipsettings 
   /var/lib/asterisk/bin/module_admin install weakpasswords 
   /var/lib/asterisk/bin/module_admin install fw_langpacks
-
   /var/lib/asterisk/bin/module_admin reload
 
   # Stop the ability to type the URL of the module and bypass security
@@ -234,9 +276,11 @@ AMPDBPASS=$FREEPBXPASSW
   </Files> 
   " > /var/www/html/admin/modules/.htaccess
 
+  #Insert admin / admin user into FreePBX
+  mysql -uroot -p$MYSQLROOTPASSWD asterisk -e "INSERT INTO ampusers (username,password_sha1,extension_low,extension_high,deptname,sections) VALUES ('vm', '3559095f228e3d157f2e10971a9283b28d86395c', '', '', '', '');"
+
   #Set the AMI to only listen on 127.0.0.1
   sed -i 's/bindaddr = 0.0.0.0/bindaddr = 127.0.0.1/g' /etc/asterisk/manager.conf
-
 
   #Get FreePBX to start automatically on boot.
   echo '#!/bin/bash' > /etc/init.d/amportal-start
@@ -252,31 +296,19 @@ AMPDBPASS=$FREEPBXPASSW
   /etc/init.d/asterisk stop
   update-rc.d -f asterisk remove
 
-  /etc/init.d/apache2 restart
+  /etc/init.d/apache2 reload
   amportal kill
   amportal start
 
-  #Insert admin / admin user into FreePBX
-  mysql -uroot -p$MYSQLROOTPASSWD asterisk -e "INSERT INTO ampusers (username,password_sha1,extension_low,extension_high,deptname,sections) VALUES ('vm', '3559095f228e3d157f2e10971a9283b28d86395c', '', '', '', '');"
-
+  #Write info
   echo "Log into the FreePBX interface for the first time with:"
   echo "username = vm"
   echo "password = vmadmin"
   echo "This can be changed via the FreePBX administrator interface later."
   echo "Press Enter to continue"
-  read TEMP
+  echo "MySQL Root Password = $MYSQLROOTPASS"
 
-else
-
-    clear
-    echo "asterisk is not running"
-    echo "please correct this before installing FreePBX"
-    echo "Press enter to return to the install menu."
-    read temp
-fi
-
-#Write FreePBX info
-echo "MySQL Root Password = $MYSQLROOTPASS"
+  ExitFinish=1
 }
 
 # ---------------------- Generate Random Password -------------------
@@ -290,8 +322,8 @@ function show_menu()
 {
   echo " > Tenkai (ubuntu)"
   echo "================================"
-  echo " 0)  Install Asterisk, FreePBX and dependencies"
-  echo " 1)  Quit"
+  echo " 1)  Install Asterisk, FreePBX and dependencies"
+  echo " 9)  Quit"
   echo ""
   echo -n "(0-1) : "
   read OPTION < /dev/tty
@@ -306,12 +338,12 @@ while [ $ExitFinish -eq 0 ]; do
     show_menu
 
     case $OPTION in
-        0) 
+        1) 
             funcdependencies
             funcfreepbx
             echo "done"
         ;;
-        1)
+        9)
         ExitFinish=1
         ;;
         *)
